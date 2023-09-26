@@ -1,0 +1,7 @@
+name: ParkourPlugin
+version: '${project.version}'
+main: lampteam.parkourplugin.ParkourPlugin
+api-version: '1.16'
+commands:
+  parkourse:
+    description: ...
