@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 @SuppressWarnings("DataFlowIssue")
@@ -35,8 +36,11 @@ public class playerListeners implements Listener {
 
     // При выходе с сервера
     @EventHandler
-    public void onPlayerLeave(PlayerJoinEvent event){
+    public void onPlayerLeave(PlayerQuitEvent event){
         Player player = event.getPlayer();
+        if (ParkourPlugin.getPlugin().getArena(player.getMetadata("parkour_arena_id").get(0).asString()) == null){
+            return;
+        }
         ParkourPlugin.getPlugin().getArena(player.getMetadata("parkour_arena_id").get(0).asString()).leave(player);
     }
 

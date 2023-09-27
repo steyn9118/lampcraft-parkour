@@ -3,6 +3,7 @@ package lampteam.parkourplugin;
 import lampteam.parkourplugin.commands.ParkourCommands;
 import lampteam.parkourplugin.listeners.playerListeners;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -63,15 +64,57 @@ public final class ParkourPlugin extends JavaPlugin {
 
             String id = config.getString("id");
             String name = config.getString("displayName");
+            ChatColor nameColor = toColor(config.getString("nameColor"));
+            String difficulty = config.getString("difficulty");
+            ChatColor difficultyColor = toColor(config.getString("difficultyColor"));
             int minY = config.getInt("minY");
             Location lobbyLocation = config.getLocation("lobbyLocation");
             List<Location> checkpoints = (List<Location>) config.getList("checkpoints");
 
-            arena.init(id, name, minY, lobbyLocation, checkpoints);
+            arena.init(id, name, nameColor, difficulty, difficultyColor, minY, lobbyLocation, checkpoints);
             arenas.add(arena);
-
         }
+    }
 
+    public ChatColor toColor(String input){
+        switch (input) {
+            case "black":
+                return ChatColor.BLACK;
+            case "dark blue":
+                return ChatColor.DARK_BLUE;
+            case "dark green":
+                return ChatColor.DARK_GREEN;
+            case "aqua":
+                return ChatColor.AQUA;
+            case "dark red":
+                return ChatColor.DARK_RED;
+            case "dark purple":
+                return ChatColor.DARK_PURPLE;
+            case "gold":
+                return ChatColor.GOLD;
+            case "gray":
+                return ChatColor.GRAY;
+            case "dark gray":
+                return ChatColor.DARK_GRAY;
+            case "blue":
+                return ChatColor.BLUE;
+            case "green":
+                return ChatColor.GREEN;
+            case "dark aqua":
+                return ChatColor.DARK_AQUA;
+            case "red":
+                return ChatColor.RED;
+            case "light purple":
+                return ChatColor.LIGHT_PURPLE;
+            case "yellow":
+                return ChatColor.YELLOW;
+            case "white":
+                return ChatColor.WHITE;
+            case "bold":
+                return ChatColor.BOLD;
+            default:
+                return ChatColor.WHITE;
+        }
     }
 
     public void reload(){

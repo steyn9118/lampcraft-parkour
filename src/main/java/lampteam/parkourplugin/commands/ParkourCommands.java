@@ -24,9 +24,16 @@ public class ParkourCommands implements CommandExecutor {
                 return false;
             }
 
-            // Получение игрока
             ParkourPlugin plugin = ParkourPlugin.getPlugin();
-            if (Bukkit.getPlayer(args[1]) == null){
+
+            // Перезагрузка
+            if (args[0].equals("reload")){
+                plugin.reload();
+                return false;
+            }
+
+            // Получение игрока
+            if (args.length == 1 || Bukkit.getPlayer(args[1]) == null){
                 commandSender.sendMessage("Игрок не существует");
                 return false;
             }
@@ -57,14 +64,8 @@ public class ParkourCommands implements CommandExecutor {
             }
 
             // Возврат в начало
-            if (args[0].equals("restart")){
+            if (args[0].equals("restart")) {
                 plugin.getArena(player.getMetadata("parkour_arena_id").get(0).asString()).restart(player);
-                return false;
-            }
-
-            // Перезагрузка
-            if (args[0].equals("reload")){
-                plugin.reload();
                 return false;
             }
 
