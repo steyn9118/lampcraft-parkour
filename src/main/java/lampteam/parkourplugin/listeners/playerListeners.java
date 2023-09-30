@@ -22,7 +22,7 @@ public class playerListeners implements Listener {
         }
 
         if (player.getLocation().getBlockY() < player.getMetadata("parkour_min_y").get(0).asInt()){
-            ParkourPlugin.getPlugin().getArena(player.getMetadata("parkour_arena_id").get(0).asString()).returnToLastCheckpoint(player);
+            ParkourPlugin.getPlugin().getArenaByID(player.getMetadata("parkour_arena_id").get(0).asString()).returnToLastCheckpoint(player);
         }
     }
 
@@ -38,10 +38,10 @@ public class playerListeners implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
         Player player = event.getPlayer();
-        if (ParkourPlugin.getPlugin().getArena(player.getMetadata("parkour_arena_id").get(0).asString()) == null){
+        if (ParkourPlugin.getPlugin().getArenaByID(player.getMetadata("parkour_arena_id").get(0).asString()) == null){
             return;
         }
-        ParkourPlugin.getPlugin().getArena(player.getMetadata("parkour_arena_id").get(0).asString()).leave(player);
+        ParkourPlugin.getPlugin().getArenaByID(player.getMetadata("parkour_arena_id").get(0).asString()).leave(player);
     }
 
 }

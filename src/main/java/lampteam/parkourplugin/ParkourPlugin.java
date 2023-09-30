@@ -2,13 +2,17 @@ package lampteam.parkourplugin;
 
 import lampteam.parkourplugin.commands.ParkourCommands;
 import lampteam.parkourplugin.listeners.playerListeners;
+import lampteam.parkourplugin.utils.PlaceholderManager;
+import lampteam.parkourplugin.utils.StatsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,23 +25,49 @@ public final class ParkourPlugin extends JavaPlugin {
     public static ParkourPlugin getPlugin(){
         return plugin;
     }
+    public List<Arena> getArenas() {
+        return arenas;
+    }
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+
         plugin = this;
 
         Bukkit.getServer().getPluginManager().registerEvents(new playerListeners(), this);
         getCommand("parkourse").setExecutor(new ParkourCommands());
+        new PlaceholderManager().register();
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
+        try {
+            StatsManager.loadRecords();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         loadArenas();
+
+        // Таймер сохранения статистики
+        BukkitRunnable statsSavingTimer = new BukkitRunnable() {
+            @Override
+            public void run() {
+
+                // Сохранение статистики
+                try {
+                    StatsManager.saveRecords();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        };
+        statsSavingTimer.runTaskTimer(this, 20*600, 20*600);
 
     }
 
-    public Arena getArena(String id){
+    // Получить арену по ID
+    public Arena getArenaByID(String id){
         for (Arena arena : arenas){
             if (!arena.getId().equals(id)){
                 continue;
@@ -47,6 +77,7 @@ public final class ParkourPlugin extends JavaPlugin {
         return null;
     }
 
+    // Загрузка арен из конфига
     public void loadArenas(){
 
         File arenasFolder = new File(ParkourPlugin.getPlugin().getDataFolder() + "/Arenas");
@@ -60,8 +91,6 @@ public final class ParkourPlugin extends JavaPlugin {
 
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-            Arena arena = new Arena();
-
             String id = config.getString("id");
             String name = config.getString("displayName");
             ChatColor nameColor = toColor(config.getString("nameColor"));
@@ -71,11 +100,11 @@ public final class ParkourPlugin extends JavaPlugin {
             Location lobbyLocation = config.getLocation("lobbyLocation");
             List<Location> checkpoints = (List<Location>) config.getList("checkpoints");
 
-            arena.init(id, name, nameColor, difficulty, difficultyColor, minY, lobbyLocation, checkpoints);
-            arenas.add(arena);
+            arenas.add(new Arena(id, name, nameColor, difficulty, difficultyColor, minY, lobbyLocation, checkpoints));
         }
     }
 
+    // Переводчик цвета (для конфигов)
     public ChatColor toColor(String input){
         switch (input) {
             case "black":
@@ -117,18 +146,37 @@ public final class ParkourPlugin extends JavaPlugin {
         }
     }
 
+    // Перезагрузка
     public void reload(){
+
+        // Остановка всех идущих игр
         if (arenas.size() > 0){
             for (Arena arena : arenas){
                 arena.stop();
             }
             arenas.clear();
         }
+
+        // Сохранение статистики
+        try {
+            StatsManager.saveRecords();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         loadArenas();
+
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+
+        // Сохранение статистики
+        try {
+            StatsManager.saveRecords();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
