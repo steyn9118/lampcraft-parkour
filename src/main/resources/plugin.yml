@@ -1,7 +1,9 @@
 name: ParkourPlugin
 version: '${project.version}'
-main: lampteam.parkourplugin.ParkourPlugin
-api-version: '1.16'
+main: steyn91.parkourplugin.ParkourPlugin
+api-version: '1.18'
 commands:
+  padmin:
+    description: ...
   parkourse:
     description: ...
