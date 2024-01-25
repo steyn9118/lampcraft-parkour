@@ -33,12 +33,11 @@ public class ParkourCommands implements CommandExecutor {
             Player player = Bukkit.getPlayer(args[1]);
             if (player == null) return false;
 
-            ParkourPlugin.getPlugin().getLogger().info("hoba");
+
 
             switch (args.length){
                 case (2):
                     Arena playerArena = Utils.getArenaByPlayer(player);
-                    ParkourPlugin.getPlugin().getLogger().info("2");
                     switch (args[0]){
                         case "stats":
                             player.sendMessage(ChatColor.YELLOW + "---- ТВОЯ СТАТИСТИКА ----");
@@ -65,7 +64,6 @@ public class ParkourCommands implements CommandExecutor {
                 break;
 
                 case (3):
-                    ParkourPlugin.getPlugin().getLogger().info("3");
                     switch (args[0]){
                         case "checkpoint":
                             Arena arena = Utils.getArenaByPlayer(player);

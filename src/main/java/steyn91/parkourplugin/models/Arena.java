@@ -146,7 +146,7 @@ public class Arena {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 100, 1f);
 
         StatsManager.updateSeconds(player, id, currentTime.get(player));
-        StatsManager.updateAttempts(player, id, currentTime.get(player));
+        StatsManager.updateAttempts(player, id, attempts.get(player));
 
         leave(player);
     }

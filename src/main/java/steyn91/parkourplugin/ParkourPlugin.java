@@ -59,16 +59,14 @@ public final class ParkourPlugin extends JavaPlugin {
 
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-            String id = config.getString("id");
-            String name = config.getString("displayName");
-            ChatColor nameColor = Utils.toColor(config.getString("nameColor"));
-            String difficulty = config.getString("difficulty");
-            ChatColor difficultyColor = Utils.toColor(config.getString("difficultyColor"));
-            int minY = config.getInt("minY");
-            Location lobbyLocation = config.getLocation("lobbyLocation");
-            List<Location> checkpoints = (List<Location>) config.getList("checkpoints");
-
-            arenas.add(new Arena(id, name, nameColor, difficulty, difficultyColor, minY, lobbyLocation, checkpoints));
+            arenas.add(new Arena(config.getString("id"),
+                    config.getString("displayName"),
+                    Utils.toColor(config.getString("nameColor")),
+                    config.getString("difficulty"),
+                    Utils.toColor(config.getString("difficultyColor")),
+                    config.getInt("minY"),
+                    config.getLocation("lobbyLocation"),
+                    (List<Location>) config.getList("checkpoints")));
         }
     }
 

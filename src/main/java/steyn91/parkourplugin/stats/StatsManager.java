@@ -26,10 +26,10 @@ public class StatsManager {
         }
 
         PlayerStat stat = Database.getPlayerStatOnArena(playerName, courseId);
-        if (stat == null){
-            stat = new PlayerStat(playerName, courseId, 0, 0);
-            cache.add(stat);
-        }
+        if (stat == null) stat = new PlayerStat(playerName, courseId, 0, 0);
+
+        cache.add(stat);
+
         return stat;
     }
 
@@ -57,6 +57,7 @@ public class StatsManager {
 
     public static void updateSeconds(Player player, String courseID, int newSeconds){
         PlayerStat record = getPlayerStatOnCourse(player.getName(), courseID);
+        if (record.getSeconds() == 0) record.setSeconds(newSeconds);
         if (record.getSeconds() <= newSeconds) return;
 
         player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.MASTER, 100, 1f);
